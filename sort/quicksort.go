@@ -1,19 +1,25 @@
 package sort
 
-// partition1 ...
-func partition1(arr []int) int {
-	pivot_idx := len(arr) - 1
-
-	for i := 0; i < len(arr)-1; i++ {
-		if arr[i] > arr[pivot_idx] {
-
+func partition(arr []int) int {
+	pivotIdx := len(arr) - 1
+	highIdx := 0
+	for i := 0; i < pivotIdx; i++ {
+		if arr[i] < arr[pivotIdx] {
+			arr[i], arr[highIdx] = arr[highIdx], arr[i]
+			highIdx++
 		}
 	}
+	arr[highIdx], arr[pivotIdx] = arr[pivotIdx], arr[highIdx]
+	return highIdx
 }
 
-// QuickSort1 ...
-func QuickSort1(arr []int) {
-	pi := partition1(arr)
-	// QuickSort1(arr[:pi])
-	// QuickSort1(arr[pi+1:])
+// QuickSort ...
+func QuickSort(arr []int) {
+	pi := partition(arr)
+	if pi > 0 && len(arr[:pi]) > 1 {
+		QuickSort(arr[:pi])
+	}
+	if len(arr[pi+1:]) > 1 {
+		QuickSort(arr[pi+1:])
+	}
 }
