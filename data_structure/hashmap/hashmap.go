@@ -14,7 +14,7 @@ var defaultCreateBucketFunc = func() bucket {
 
 func (m *hashMap) getBucket(key string) bucket {
 	bucketID := m.hash(key)
-	if bucketID > len(m.buckets) {
+	if bucketID >= len(m.buckets) {
 		m.createBuckets(bucketID)
 	}
 	return m.buckets[bucketID]
