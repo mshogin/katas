@@ -2,7 +2,6 @@ package hashmap
 
 type hashMap struct {
 	Size int
-	keys []string
 
 	hash         hashFunk
 	buckets      []bucket
