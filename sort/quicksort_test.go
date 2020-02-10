@@ -1,13 +1,13 @@
 package sort
 
 import (
+	"math/rand"
 	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-// systemSort ...
 func systemSort(source []int) []int {
 	result := make([]int, len(source))
 	copy(result[:], source)
@@ -17,13 +17,33 @@ func systemSort(source []int) []int {
 	return result
 }
 
-// TestQuickSort ...
+func unique(intSlice []int) []int {
+	keys := make(map[int]bool)
+	list := []int{}
+	for _, entry := range intSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
+}
+
+func genereateArray() []int {
+	N := rand.Intn(100)
+	arr := make([]int, N)
+	for j := range arr {
+		arr[j] = rand.Intn(100)
+	}
+	return unique(arr)
+}
+
 func TestQuickSort(t *testing.T) {
 	a := assert.New(t)
 
-	arr := []int{6, 7, 3, 2, 1}
-
-	QuickSort(arr)
-
-	a.Equal(systemSort(arr), arr)
+	for i := 0; i < 100; i++ {
+		arr := genereateArray()
+		QuickSort(arr)
+		a.Equal(systemSort(arr), arr)
+	}
 }

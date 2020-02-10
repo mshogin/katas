@@ -1,25 +1,34 @@
 package sort
 
+func swap(arr []int, i, j int) {
+	arr[i], arr[j] = arr[j], arr[i]
+}
+
 func partition(arr []int) int {
-	pivotIdx := len(arr) - 1
+	if len(arr) < 2 {
+		return 0
+	}
+
 	highIdx := 0
+	pivotIdx := len(arr) - 1
+
 	for i := 0; i < pivotIdx; i++ {
 		if arr[i] < arr[pivotIdx] {
-			arr[i], arr[highIdx] = arr[highIdx], arr[i]
+			swap(arr, highIdx, i)
 			highIdx++
 		}
 	}
-	arr[highIdx], arr[pivotIdx] = arr[pivotIdx], arr[highIdx]
+	swap(arr, pivotIdx, highIdx)
 	return highIdx
 }
 
-// QuickSort ...
+// QuickSort - quick sort implementation
 func QuickSort(arr []int) {
-	pi := partition(arr)
-	if pi > 0 && len(arr[:pi]) > 1 {
-		QuickSort(arr[:pi])
+	pivotIdx := partition(arr)
+	if pivotIdx > 1 {
+		QuickSort(arr[:pivotIdx])
 	}
-	if len(arr[pi+1:]) > 1 {
-		QuickSort(arr[pi+1:])
+	if len(arr) > 2 {
+		QuickSort(arr[pivotIdx+1:])
 	}
 }
