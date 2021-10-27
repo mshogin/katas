@@ -12,7 +12,7 @@ type doubleLinkedListNode struct {
 	Value interface{}
 }
 
-type doubleLinkedList struct {
+type DoubleLinkedList struct {
 	First *doubleLinkedListNode
 	Last  *doubleLinkedListNode
 
@@ -20,14 +20,14 @@ type doubleLinkedList struct {
 }
 
 // NewDoubleLinkedList - create new double linked list
-func NewDoubleLinkedList() *doubleLinkedList {
-	l := &doubleLinkedList{}
+func NewDoubleLinkedList() *DoubleLinkedList {
+	l := &DoubleLinkedList{}
 	l.Last = l.First
 	return l
 }
 
 // AddLast - adds new node at the end of the list and returs added node
-func (l *doubleLinkedList) AddLast(n *doubleLinkedListNode) *doubleLinkedListNode {
+func (l *DoubleLinkedList) AddLast(n *doubleLinkedListNode) *doubleLinkedListNode {
 	l.count++
 	if l.Last == nil {
 		l.First = n
@@ -41,7 +41,7 @@ func (l *doubleLinkedList) AddLast(n *doubleLinkedListNode) *doubleLinkedListNod
 }
 
 // AddFirst - adds new node at the beginning of the list and returs added node
-func (l *doubleLinkedList) AddFirst(n *doubleLinkedListNode) *doubleLinkedListNode {
+func (l *DoubleLinkedList) AddFirst(n *doubleLinkedListNode) *doubleLinkedListNode {
 	l.count++
 	if l.Last == nil {
 		l.Last = n
@@ -54,12 +54,12 @@ func (l *doubleLinkedList) AddFirst(n *doubleLinkedListNode) *doubleLinkedListNo
 }
 
 // Length - returns length of the list
-func (l *doubleLinkedList) Length() int {
+func (l *DoubleLinkedList) Length() int {
 	return l.count
 }
 
 // AddAfter - adds new node after existing node
-func (l *doubleLinkedList) AddAfter(node *doubleLinkedListNode, n *doubleLinkedListNode) (*doubleLinkedListNode, error) {
+func (l *DoubleLinkedList) AddAfter(node *doubleLinkedListNode, n *doubleLinkedListNode) (*doubleLinkedListNode, error) {
 	if node == nil {
 		return nil, errors.New("The node after which we need to add a node is nil")
 	}
@@ -89,7 +89,7 @@ func (l *doubleLinkedList) AddAfter(node *doubleLinkedListNode, n *doubleLinkedL
 }
 
 // AddBefore - adds new node before existing node
-func (l *doubleLinkedList) AddBefore(node *doubleLinkedListNode, n *doubleLinkedListNode) (*doubleLinkedListNode, error) {
+func (l *DoubleLinkedList) AddBefore(node *doubleLinkedListNode, n *doubleLinkedListNode) (*doubleLinkedListNode, error) {
 	if node == nil {
 		return nil, errors.New("The node after which we need to add a node is nil")
 	}
@@ -107,7 +107,7 @@ func (l *doubleLinkedList) AddBefore(node *doubleLinkedListNode, n *doubleLinked
 	return n, nil
 }
 
-func (l *doubleLinkedList) HasNode(node *doubleLinkedListNode) bool {
+func (l *DoubleLinkedList) HasNode(node *doubleLinkedListNode) bool {
 	found := false
 	l.ForwardTraverse(
 		func(nextNode *doubleLinkedListNode) {
@@ -119,7 +119,7 @@ func (l *doubleLinkedList) HasNode(node *doubleLinkedListNode) bool {
 }
 
 // ForwardTraverse - traverse the list from first to last
-func (l *doubleLinkedList) ForwardTraverse(callback func(*doubleLinkedListNode)) {
+func (l *DoubleLinkedList) ForwardTraverse(callback func(*doubleLinkedListNode)) {
 	item := l.First
 	for item != nil {
 		callback(item)
@@ -128,7 +128,7 @@ func (l *doubleLinkedList) ForwardTraverse(callback func(*doubleLinkedListNode))
 }
 
 // BackwardTraverse - traverse the list from the last to the first
-func (l *doubleLinkedList) BackwardTraverse(callback func(*doubleLinkedListNode)) {
+func (l *DoubleLinkedList) BackwardTraverse(callback func(*doubleLinkedListNode)) {
 	item := l.Last
 	for item != nil {
 		callback(item)
@@ -137,7 +137,7 @@ func (l *doubleLinkedList) BackwardTraverse(callback func(*doubleLinkedListNode)
 }
 
 // BackwardTraverse - traverse the list from the last to the first
-func (l *doubleLinkedList) Remove(node *doubleLinkedListNode) {
+func (l *DoubleLinkedList) Remove(node *doubleLinkedListNode) {
 	prevNode := node.Prev
 	nextNode := node.Next
 	node.Next = nil
@@ -159,7 +159,7 @@ func (l *doubleLinkedList) Remove(node *doubleLinkedListNode) {
 	l.count--
 }
 
-func (l *doubleLinkedList) Print() {
+func (l *DoubleLinkedList) Print() {
 
 	l.ForwardTraverse(func(item *doubleLinkedListNode) {
 		fmt.Printf("%p %+v\n", item, item)
