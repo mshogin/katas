@@ -3,8 +3,8 @@ package list_test
 import (
 	"testing"
 
+	"github.com/mshogin/katas/ds/list"
 	"github.com/stretchr/testify/assert"
-	"gitlub.com/mshogin/katas/data_structure/list"
 )
 
 func TestLinkedList1(t *testing.T) {

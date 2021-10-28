@@ -30,6 +30,8 @@ func TestDoubleLinkedListAddLast(t *testing.T) {
 	a.Equal(l.First, l.Last)
 	a.Nil(firstNode.Prev)
 	a.Nil(firstNode.Next)
+	a.Equal("1", l.ForwardTraverseToString())
+	a.Equal("1", l.BackwardTraverseToString())
 
 	secondNode := &doubleLinkedListNode{Value: 2}
 	l.AddLast(secondNode)
@@ -41,17 +43,27 @@ func TestDoubleLinkedListAddLast(t *testing.T) {
 	a.Nil(secondNode.Next)
 	a.Equal(secondNode, firstNode.Next)
 	a.Equal(firstNode, secondNode.Prev)
+	a.Equal("1 2", l.ForwardTraverseToString())
+	a.Equal("2 1", l.BackwardTraverseToString())
 
 	thirdNode := &doubleLinkedListNode{Value: 3}
 	l.AddLast(thirdNode)
 	a.Equal(3, l.Length())
 	a.NotEqual(l.First, l.Last)
+
 	a.Equal(firstNode, l.First)
 	a.Equal(thirdNode, l.Last)
+
 	a.NotNil(thirdNode.Prev)
 	a.Nil(thirdNode.Next)
+
 	a.Equal(thirdNode, secondNode.Next)
 	a.Equal(secondNode, thirdNode.Prev)
+
+	a.Equal(firstNode, secondNode.Prev)
+	a.Equal(secondNode, firstNode.Next)
+	a.Equal("1 2 3", l.ForwardTraverseToString())
+	a.Equal("3 2 1", l.BackwardTraverseToString())
 }
 
 func TestDoubleLinkedListAddFirst(t *testing.T) {
@@ -67,6 +79,8 @@ func TestDoubleLinkedListAddFirst(t *testing.T) {
 	a.Equal(l.First, l.Last)
 	a.Nil(firstNode.Prev)
 	a.Nil(firstNode.Next)
+	a.Equal("1", l.ForwardTraverseToString())
+	a.Equal("1", l.BackwardTraverseToString())
 
 	secondNode := &doubleLinkedListNode{Value: 2}
 	l.AddFirst(secondNode)
@@ -78,6 +92,8 @@ func TestDoubleLinkedListAddFirst(t *testing.T) {
 	a.Nil(secondNode.Prev)
 	a.Equal(secondNode, firstNode.Prev)
 	a.Equal(firstNode, secondNode.Next)
+	a.Equal("2 1", l.ForwardTraverseToString())
+	a.Equal("1 2", l.BackwardTraverseToString())
 
 	thirdNode := &doubleLinkedListNode{Value: 3}
 	l.AddFirst(thirdNode)
@@ -89,6 +105,9 @@ func TestDoubleLinkedListAddFirst(t *testing.T) {
 	a.Nil(thirdNode.Prev)
 	a.Equal(thirdNode, secondNode.Prev)
 	a.Equal(secondNode, thirdNode.Next)
+
+	a.Equal("3 2 1", l.ForwardTraverseToString())
+	a.Equal("1 2 3", l.BackwardTraverseToString())
 }
 
 func TestDoubleLinkedListAddAfter(t *testing.T) {
@@ -103,21 +122,27 @@ func TestDoubleLinkedListAddAfter(t *testing.T) {
 
 	node1 := l.AddLast(&doubleLinkedListNode{Value: 1})
 	node3 := l.AddLast(&doubleLinkedListNode{Value: 3})
+	a.NotNil(node3)
+	a.NotNil(node1)
+	a.Equal("1 3", l.ForwardTraverseToString())
+	a.Equal("3 1", l.BackwardTraverseToString())
+	a.Equal(l.Last, node3)
+	a.Equal(l.Last.Prev, node1)
 
 	node2, err := l.AddAfter(node1, &doubleLinkedListNode{Value: 2})
 	a.NoError(err)
 	a.NotNil(node2)
-	a.Equal(node1, node2.Prev)
-	a.Equal(node3, node2.Next)
-	a.Equal(node2, node1.Next)
-	a.Equal(node2, node3.Prev)
+	a.Equal("1 2 3", l.ForwardTraverseToString())
+	a.Equal("3 2 1", l.BackwardTraverseToString())
+	a.Equal(l.Last, node3)
+	a.Equal(l.Last.Prev, node2)
 
 	node4, err := l.AddAfter(node3, &doubleLinkedListNode{Value: 4})
 	a.NoError(err)
-	a.NotNil(node4)
-	a.Equal(node3, node4.Prev)
-	a.Equal(node4, node3.Next)
-	a.Nil(node4.Next)
+	a.Equal(l.Last, node4)
+	a.Equal(l.Last.Prev, node3)
+	a.Equal("1 2 3 4", l.ForwardTraverseToString())
+	a.Equal("4 3 2 1", l.BackwardTraverseToString())
 }
 
 func TestDoubleLinkedListAddBefore(t *testing.T) {
@@ -134,21 +159,20 @@ func TestDoubleLinkedListAddBefore(t *testing.T) {
 
 	node2 := l.AddLast(&doubleLinkedListNode{Value: 2})
 	node4 := l.AddLast(&doubleLinkedListNode{Value: 4})
+	a.Equal("2 4", l.ForwardTraverseToString())
+	a.Equal("4 2", l.BackwardTraverseToString())
 
 	node3, err := l.AddBefore(node4, &doubleLinkedListNode{Value: 3})
 	a.NoError(err)
 	a.NotNil(node3)
-	a.Equal(node2, node3.Prev)
-	a.Equal(node4, node3.Next)
-	a.Equal(node3, node2.Next)
-	a.Equal(node3, node4.Prev)
+	a.Equal("2 3 4", l.ForwardTraverseToString())
+	a.Equal("4 3 2", l.BackwardTraverseToString())
 
 	node1, err := l.AddBefore(node2, &doubleLinkedListNode{Value: 1})
 	a.NoError(err)
 	a.NotNil(node1)
-	a.Equal(node1, node2.Prev)
-	a.Equal(node2, node1.Next)
-	a.Nil(node1.Prev)
+	a.Equal("1 2 3 4", l.ForwardTraverseToString())
+	a.Equal("4 3 2 1", l.BackwardTraverseToString())
 }
 
 func TestHasNode(t *testing.T) {
@@ -199,16 +223,19 @@ func TestDoubleLinkedListRemove(t *testing.T) {
 	node1 := l.AddLast(&doubleLinkedListNode{Value: 1})
 	node2 := l.AddLast(&doubleLinkedListNode{Value: 2})
 	node3 := l.AddLast(&doubleLinkedListNode{Value: 3})
+	a.Equal("1 2 3", l.ForwardTraverseToString())
+	a.Equal("3 2 1", l.BackwardTraverseToString())
 
 	a.Equal(3, l.Length())
 
 	l.Remove(node2)
 	a.Equal(2, l.Length())
-	a.True(l.HasNode(node1))
-	a.False(l.HasNode(node2))
-	a.True(l.HasNode(node3))
+	a.Equal("1 3", l.ForwardTraverseToString())
+	a.Equal("3 1", l.BackwardTraverseToString())
 
 	l.Remove(node1)
+	a.Equal("3", l.ForwardTraverseToString())
+	a.Equal("3", l.BackwardTraverseToString())
 	a.Equal(1, l.Length())
 	a.False(l.HasNode(node1))
 	a.True(l.HasNode(node3))

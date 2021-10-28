@@ -1,4 +1,4 @@
-module gitlub.com/mshogin/katas
+module github.com/mshogin/katas
 
 go 1.13
 

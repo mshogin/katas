@@ -3,6 +3,7 @@ package list
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type doubleLinkedListNode struct {
@@ -59,52 +60,54 @@ func (l *DoubleLinkedList) Length() int {
 }
 
 // AddAfter - adds new node after existing node
-func (l *DoubleLinkedList) AddAfter(node *doubleLinkedListNode, n *doubleLinkedListNode) (*doubleLinkedListNode, error) {
-	if node == nil {
+func (l *DoubleLinkedList) AddAfter(inListNode *doubleLinkedListNode, newNode *doubleLinkedListNode) (*doubleLinkedListNode, error) {
+	if inListNode == nil {
 		return nil, errors.New("The node after which we need to add a node is nil")
 	}
-	if !l.HasNode(node) {
-		return nil, fmt.Errorf("The node(%v) does not belongs to the list", node)
+	if !l.HasNode(inListNode) {
+		return nil, fmt.Errorf("The node(%v) does not belongs to the list", inListNode)
 	}
 	l.count++
-	nodeNext := node.Next
-	node.Next = n
-	n.Prev = node
-	if nodeNext != nil {
-		nodeNext.Prev = n
-		n.Next = nodeNext
+
+	nextNode := inListNode.Next
+
+	inListNode.Next = newNode
+	newNode.Prev = inListNode
+
+	if nextNode != nil {
+		newNode.Next = nextNode
+		nextNode.Prev = newNode
+	}
+	if l.Last == inListNode {
+		l.Last = newNode
 	}
 
-	n = node
-	temp := n
-
-	temp.Prev = n
-	temp.Next = n.Next
-	n.Next = temp
-	if n.Next != nil {
-		n = temp
-	}
-
-	return n, nil
+	return newNode, nil
 }
 
 // AddBefore - adds new node before existing node
-func (l *DoubleLinkedList) AddBefore(node *doubleLinkedListNode, n *doubleLinkedListNode) (*doubleLinkedListNode, error) {
-	if node == nil {
+func (l *DoubleLinkedList) AddBefore(inListNode *doubleLinkedListNode, newNode *doubleLinkedListNode) (*doubleLinkedListNode, error) {
+	if inListNode == nil {
 		return nil, errors.New("The node after which we need to add a node is nil")
 	}
-	if !l.HasNode(node) {
-		return nil, fmt.Errorf("The node(%v) does not belongs to the list", node)
+	if !l.HasNode(inListNode) {
+		return nil, fmt.Errorf("The node(%v) does not belongs to the list", inListNode)
 	}
 	l.count++
-	nodePrev := node.Prev
-	node.Prev = n
-	n.Next = node
+
+	nodePrev := inListNode.Prev
+
+	inListNode.Prev = newNode
+	newNode.Next = inListNode
+
 	if nodePrev != nil {
-		nodePrev.Next = n
-		n.Prev = nodePrev
+		nodePrev.Next = newNode
+		newNode.Prev = nodePrev
 	}
-	return n, nil
+	if l.First == inListNode {
+		l.First = newNode
+	}
+	return newNode, nil
 }
 
 func (l *DoubleLinkedList) HasNode(node *doubleLinkedListNode) bool {
@@ -160,8 +163,23 @@ func (l *DoubleLinkedList) Remove(node *doubleLinkedListNode) {
 }
 
 func (l *DoubleLinkedList) Print() {
-
 	l.ForwardTraverse(func(item *doubleLinkedListNode) {
 		fmt.Printf("%p %+v\n", item, item)
 	})
+}
+
+func (l *DoubleLinkedList) ForwardTraverseToString() string {
+	r := ""
+	l.ForwardTraverse(func(item *doubleLinkedListNode) {
+		r = fmt.Sprintf("%s %v", r, item.Value)
+	})
+	return strings.Trim(r, " ")
+}
+
+func (l *DoubleLinkedList) BackwardTraverseToString() string {
+	r := ""
+	l.BackwardTraverse(func(item *doubleLinkedListNode) {
+		r = fmt.Sprintf("%s %v", r, item.Value)
+	})
+	return strings.Trim(r, " ")
 }

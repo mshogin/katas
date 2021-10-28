@@ -4,8 +4,8 @@ import (
 	"math/rand"
 	"testing"
 
+	"github.com/mshogin/katas/utils"
 	"github.com/stretchr/testify/assert"
-	"gitlub.com/mshogin/katas/utils"
 )
 
 func TestBinaryHeap(t *testing.T) {
