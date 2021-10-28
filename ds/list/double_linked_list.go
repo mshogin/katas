@@ -6,16 +6,16 @@ import (
 	"strings"
 )
 
-type doubleLinkedListNode struct {
-	Prev *doubleLinkedListNode
-	Next *doubleLinkedListNode
+type DoubleLinkedListNode struct {
+	Prev *DoubleLinkedListNode
+	Next *DoubleLinkedListNode
 
 	Value interface{}
 }
 
 type DoubleLinkedList struct {
-	First *doubleLinkedListNode
-	Last  *doubleLinkedListNode
+	First *DoubleLinkedListNode
+	Last  *DoubleLinkedListNode
 
 	count int
 }
@@ -28,7 +28,7 @@ func NewDoubleLinkedList() *DoubleLinkedList {
 }
 
 // AddLast - adds new node at the end of the list and returs added node
-func (l *DoubleLinkedList) AddLast(n *doubleLinkedListNode) *doubleLinkedListNode {
+func (l *DoubleLinkedList) AddLast(n *DoubleLinkedListNode) *DoubleLinkedListNode {
 	l.count++
 	if l.Last == nil {
 		l.First = n
@@ -42,7 +42,7 @@ func (l *DoubleLinkedList) AddLast(n *doubleLinkedListNode) *doubleLinkedListNod
 }
 
 // AddFirst - adds new node at the beginning of the list and returs added node
-func (l *DoubleLinkedList) AddFirst(n *doubleLinkedListNode) *doubleLinkedListNode {
+func (l *DoubleLinkedList) AddFirst(n *DoubleLinkedListNode) *DoubleLinkedListNode {
 	l.count++
 	if l.Last == nil {
 		l.Last = n
@@ -54,13 +54,17 @@ func (l *DoubleLinkedList) AddFirst(n *doubleLinkedListNode) *doubleLinkedListNo
 	return n
 }
 
+func (l *DoubleLinkedList) AddFirstValue(v interface{}) *DoubleLinkedListNode {
+	return l.AddFirst(&DoubleLinkedListNode{Value: v})
+}
+
 // Length - returns length of the list
 func (l *DoubleLinkedList) Length() int {
 	return l.count
 }
 
 // AddAfter - adds new node after existing node
-func (l *DoubleLinkedList) AddAfter(inListNode *doubleLinkedListNode, newNode *doubleLinkedListNode) (*doubleLinkedListNode, error) {
+func (l *DoubleLinkedList) AddAfter(inListNode *DoubleLinkedListNode, newNode *DoubleLinkedListNode) (*DoubleLinkedListNode, error) {
 	if inListNode == nil {
 		return nil, errors.New("The node after which we need to add a node is nil")
 	}
@@ -86,7 +90,7 @@ func (l *DoubleLinkedList) AddAfter(inListNode *doubleLinkedListNode, newNode *d
 }
 
 // AddBefore - adds new node before existing node
-func (l *DoubleLinkedList) AddBefore(inListNode *doubleLinkedListNode, newNode *doubleLinkedListNode) (*doubleLinkedListNode, error) {
+func (l *DoubleLinkedList) AddBefore(inListNode *DoubleLinkedListNode, newNode *DoubleLinkedListNode) (*DoubleLinkedListNode, error) {
 	if inListNode == nil {
 		return nil, errors.New("The node after which we need to add a node is nil")
 	}
@@ -110,10 +114,10 @@ func (l *DoubleLinkedList) AddBefore(inListNode *doubleLinkedListNode, newNode *
 	return newNode, nil
 }
 
-func (l *DoubleLinkedList) HasNode(node *doubleLinkedListNode) bool {
+func (l *DoubleLinkedList) HasNode(node *DoubleLinkedListNode) bool {
 	found := false
 	l.ForwardTraverse(
-		func(nextNode *doubleLinkedListNode) {
+		func(nextNode *DoubleLinkedListNode) {
 			tmpFound := nextNode == node
 			found = found || tmpFound
 		},
@@ -122,7 +126,7 @@ func (l *DoubleLinkedList) HasNode(node *doubleLinkedListNode) bool {
 }
 
 // ForwardTraverse - traverse the list from first to last
-func (l *DoubleLinkedList) ForwardTraverse(callback func(*doubleLinkedListNode)) {
+func (l *DoubleLinkedList) ForwardTraverse(callback func(*DoubleLinkedListNode)) {
 	item := l.First
 	for item != nil {
 		callback(item)
@@ -131,7 +135,7 @@ func (l *DoubleLinkedList) ForwardTraverse(callback func(*doubleLinkedListNode))
 }
 
 // BackwardTraverse - traverse the list from the last to the first
-func (l *DoubleLinkedList) BackwardTraverse(callback func(*doubleLinkedListNode)) {
+func (l *DoubleLinkedList) BackwardTraverse(callback func(*DoubleLinkedListNode)) {
 	item := l.Last
 	for item != nil {
 		callback(item)
@@ -140,7 +144,7 @@ func (l *DoubleLinkedList) BackwardTraverse(callback func(*doubleLinkedListNode)
 }
 
 // BackwardTraverse - traverse the list from the last to the first
-func (l *DoubleLinkedList) Remove(node *doubleLinkedListNode) {
+func (l *DoubleLinkedList) Remove(node *DoubleLinkedListNode) {
 	prevNode := node.Prev
 	nextNode := node.Next
 	node.Next = nil
@@ -163,14 +167,14 @@ func (l *DoubleLinkedList) Remove(node *doubleLinkedListNode) {
 }
 
 func (l *DoubleLinkedList) Print() {
-	l.ForwardTraverse(func(item *doubleLinkedListNode) {
+	l.ForwardTraverse(func(item *DoubleLinkedListNode) {
 		fmt.Printf("%p %+v\n", item, item)
 	})
 }
 
 func (l *DoubleLinkedList) ForwardTraverseToString() string {
 	r := ""
-	l.ForwardTraverse(func(item *doubleLinkedListNode) {
+	l.ForwardTraverse(func(item *DoubleLinkedListNode) {
 		r = fmt.Sprintf("%s %v", r, item.Value)
 	})
 	return strings.Trim(r, " ")
@@ -178,7 +182,7 @@ func (l *DoubleLinkedList) ForwardTraverseToString() string {
 
 func (l *DoubleLinkedList) BackwardTraverseToString() string {
 	r := ""
-	l.BackwardTraverse(func(item *doubleLinkedListNode) {
+	l.BackwardTraverse(func(item *DoubleLinkedListNode) {
 		r = fmt.Sprintf("%s %v", r, item.Value)
 	})
 	return strings.Trim(r, " ")
